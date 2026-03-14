@@ -25,7 +25,11 @@ const redIcon = new L.Icon({
 function MapController({ center, zoom }) {
   const map = useMap()
   useEffect(() => {
-    map.flyTo(center, zoom, { duration: 0.8 })
+    try {
+      map.flyTo(center, zoom, { duration: 0.8 })
+    } catch (_) {
+      // map not ready (e.g. StrictMode remount)
+    }
   }, [center, zoom, map])
   return null
 }
