@@ -14,7 +14,7 @@ export default function FavoritesPage() {
   )
 
   return (
-    <div className="px-4 pb-24 md:pb-8">
+    <div className="px-4 pb-24 md:pb-8 max-w-3xl mx-auto">
       <div className="pt-6 pb-4">
         <h1 className="text-2xl font-bold text-text">我的收藏</h1>
         <p className="text-sm text-text-secondary mt-1">

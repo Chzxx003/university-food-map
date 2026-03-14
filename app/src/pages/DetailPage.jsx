@@ -58,7 +58,7 @@ export default function DetailPage() {
   }
 
   return (
-    <div className="pb-24 md:pb-8">
+    <div className="pb-24 md:pb-8 max-w-3xl mx-auto">
       {/* Gallery */}
       <div className="relative h-56 sm:h-72 md:h-80 bg-stone-200">
         <img

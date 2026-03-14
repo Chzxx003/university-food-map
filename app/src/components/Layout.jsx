@@ -93,7 +93,7 @@ export default function Layout() {
       </header>
 
       {/* Main */}
-      <main className="max-w-7xl mx-auto">
+      <main>
         <Outlet />
       </main>
 

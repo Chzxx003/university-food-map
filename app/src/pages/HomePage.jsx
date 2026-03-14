@@ -44,11 +44,11 @@ export default function HomePage() {
 
   return (
     <div className="pb-24 md:pb-8">
-      {/* Desktop: content left + sticky map right */}
-      <div className="lg:grid lg:grid-cols-[1fr_420px] lg:items-start">
+      {/* Desktop: content left + sticky map right, full viewport */}
+      <div className="lg:flex lg:items-start lg:h-[calc(100vh-64px)]">
 
         {/* ── Left column ── */}
-        <div>
+        <div className="lg:flex-1 lg:overflow-y-auto lg:h-full">
           {/* Hero area */}
           <div className="relative overflow-hidden rounded-b-[2rem]">
             <div className="absolute top-[-60px] right-[-40px] w-72 h-72 bg-gradient-to-br from-primary/30 to-secondary/20 rounded-full blur-3xl" />
@@ -190,9 +190,18 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ── Right column: sticky map (desktop only) ── */}
-        <div className="hidden lg:block sticky top-20 h-[calc(100vh-88px)] p-4 pl-2">
-          <MapView className="h-full rounded-2xl" />
+        {/* ── Right column: map panel (desktop only) ── */}
+        <div className="hidden lg:flex flex-col w-[420px] flex-shrink-0 h-full border-l border-border/40">
+          {/* Map header */}
+          <div className="flex items-center gap-2 px-4 py-3 glass-strong border-b border-border/30">
+            <MapIcon className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-text">附近餐厅</span>
+            <span className="ml-auto text-xs text-text-muted">{filteredRestaurants.length} 家</span>
+          </div>
+          {/* Map */}
+          <div className="flex-1 relative">
+            <MapView className="absolute inset-0 rounded-none" />
+          </div>
         </div>
       </div>
 

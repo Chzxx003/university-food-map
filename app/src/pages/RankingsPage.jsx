@@ -51,7 +51,7 @@ export default function RankingsPage() {
   }, [activeTab, allRestaurants])
 
   return (
-    <div className="pb-24 md:pb-8">
+    <div className="pb-24 md:pb-8 max-w-3xl mx-auto">
       {/* Glass banner */}
       <div className="relative overflow-hidden rounded-b-[2rem] mb-4">
         <div className="absolute top-[-60px] right-[-30px] w-64 h-64 bg-gradient-to-br from-amber-400/30 to-primary/20 rounded-full blur-3xl" />
