@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "foodmap",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["server.js"],
+      "name": "meituan-app",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd app && npm run dev"],
       "port": 5173
     }
   ]

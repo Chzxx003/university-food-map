@@ -18,7 +18,7 @@ export default function Layout() {
     <div className="min-h-screen bg-bg">
       {/* Desktop Header */}
       <header className="sticky top-0 z-40 glass-strong">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="mx-auto px-4 lg:px-8 xl:px-16 2xl:px-24 h-16 flex items-center justify-between">
           <NavLink to="/" className="flex items-center gap-2 cursor-pointer">
             <div className="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-sm">
               <Map className="w-5 h-5 text-white" />

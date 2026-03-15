@@ -59,6 +59,10 @@ export default function RestaurantCard({ restaurant, compact = false, mini = fal
   }
 
   if (compact) {
+    // Star rating visualization (like Meituan)
+    const fullStars = Math.floor(restaurant.rating)
+    const hasHalf = restaurant.rating - fullStars >= 0.3
+
     return (
       <div
         onClick={() => navigate(`/restaurant/${restaurant.id}`)}
@@ -68,17 +72,13 @@ export default function RestaurantCard({ restaurant, compact = false, mini = fal
           <img
             src={restaurant.cover}
             alt={restaurant.name}
-            className="w-24 h-24 rounded-xl object-cover"
+            className="w-[100px] h-[100px] rounded-xl object-cover"
             loading="lazy"
           />
-          {/* Rating badge on image */}
-          <span className="absolute bottom-1 left-1 flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-500/90 backdrop-blur-sm rounded-lg text-white text-xs font-bold">
-            <Star className="w-3 h-3 fill-white" />{restaurant.rating}
-          </span>
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold text-text truncate group-hover:text-primary transition-colors">{restaurant.name}</h3>
+            <h3 className="font-bold text-text truncate group-hover:text-primary transition-colors">{restaurant.name}</h3>
             <button
               onClick={handleFav}
               className="p-1 flex-shrink-0 cursor-pointer"
@@ -87,21 +87,40 @@ export default function RestaurantCard({ restaurant, compact = false, mini = fal
               <Heart className={`w-4 h-4 transition-colors ${bouncing ? 'heart-bounce' : ''} ${isFav ? 'text-primary fill-primary' : 'text-stone-300 hover:text-primary'}`} />
             </button>
           </div>
-          <div className="flex items-center gap-2 mt-1 text-xs text-text-secondary">
-            <span className="font-bold text-accent text-sm">¥{restaurant.avgPrice}<span className="font-normal text-text-muted">/人</span></span>
-            <span className="px-1.5 py-0.5 bg-stone-100 rounded text-text-muted">{restaurant.cuisine}</span>
+          {/* Rating stars + count + price */}
+          <div className="flex items-center gap-1.5 mt-1">
+            <div className="flex items-center gap-px">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Star
+                  key={i}
+                  className={`w-3 h-3 ${
+                    i < fullStars
+                      ? 'text-amber-500 fill-amber-500'
+                      : i === fullStars && hasHalf
+                        ? 'text-amber-500 fill-amber-500/50'
+                        : 'text-stone-200 fill-stone-200'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-xs font-bold text-primary">{restaurant.rating}</span>
+            <span className="text-xs text-text-muted">({restaurant.ratingCount}条)</span>
+            <span className="text-xs font-bold text-primary ml-auto">¥{restaurant.avgPrice}/人</span>
           </div>
-          <div className="flex flex-wrap gap-1 mt-1.5">
-            {restaurant.tags.slice(0, 3).map(tag => (
-              <span key={tag} className="text-xs px-1.5 py-0.5 rounded bg-primary/8 text-primary/80">{tag}</span>
-            ))}
-          </div>
-          <div className="flex items-center gap-3 mt-1.5 text-xs text-text-muted">
+          {/* Cuisine + distance */}
+          <div className="flex items-center gap-2 mt-1.5 text-xs text-text-muted">
+            <span className="px-1.5 py-0.5 bg-stone-100 rounded">{restaurant.cuisine}</span>
             {distText && <span className="flex items-center gap-0.5"><MapPin className="w-3 h-3" />{distText}</span>}
             {restaurant.isOpen
               ? <span className="flex items-center gap-0.5 text-green-600"><Clock className="w-3 h-3" />营业中</span>
               : <span className="flex items-center gap-0.5 text-red-400"><Clock className="w-3 h-3" />已打烊</span>
             }
+          </div>
+          {/* Tags */}
+          <div className="flex flex-wrap gap-1 mt-1.5">
+            {restaurant.tags.slice(0, 3).map(tag => (
+              <span key={tag} className="text-xs px-1.5 py-0.5 rounded bg-primary/8 text-primary/80">{tag}</span>
+            ))}
           </div>
         </div>
       </div>

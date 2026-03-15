@@ -106,35 +106,45 @@ export function AppProvider({ children }) {
   }, [searchQuery, selectedCuisine, selectedScene, selectedPriceRange, minRating, onlyOpen, selectedSchool, getDistance])
 
   // Hero restaurants: mixed strategy selection from filtered results
+  // Never take more than half the pool so the list section always has items
   const heroRestaurants = useMemo(() => {
-    if (filteredRestaurants.length < 2) return []
+    const total = filteredRestaurants.length
+    if (total < 8) return [] // need at least 8 so hero takes 4, list keeps 4+
+    const maxHeroes = 4
     const pool = [...filteredRestaurants]
     const heroes = []
     const used = new Set()
 
     // 1. 本周热门 — highest visits
-    const hot = pool.reduce((best, r) => (!used.has(r.id) && r.visits > (best?.visits ?? -1)) ? r : best, null)
-    if (hot) { heroes.push(hot); used.add(hot.id) }
+    if (heroes.length < maxHeroes) {
+      const hot = pool.reduce((best, r) => (!used.has(r.id) && r.visits > (best?.visits ?? -1)) ? r : best, null)
+      if (hot) { heroes.push(hot); used.add(hot.id) }
+    }
 
     // 2. 高分新发现 — highest rating (excluding hot)
-    const rated = pool.reduce((best, r) => (!used.has(r.id) && r.rating > (best?.rating ?? -1)) ? r : best, null)
-    if (rated) { heroes.push(rated); used.add(rated.id) }
+    if (heroes.length < maxHeroes) {
+      const rated = pool.reduce((best, r) => (!used.has(r.id) && r.rating > (best?.rating ?? -1)) ? r : best, null)
+      if (rated) { heroes.push(rated); used.add(rated.id) }
+    }
 
     // 3. 性价比之王 — highest rating/avgPrice (excluding used)
-    const value = pool.reduce((best, r) => {
-      if (used.has(r.id)) return best
-      const score = r.rating / r.avgPrice
-      return score > ((best?.rating ?? 0) / (best?.avgPrice ?? 1)) ? r : best
-    }, null)
-    if (value) { heroes.push(value); used.add(value.id) }
+    if (heroes.length < maxHeroes) {
+      const value = pool.reduce((best, r) => {
+        if (used.has(r.id)) return best
+        const score = r.rating / r.avgPrice
+        return score > ((best?.rating ?? 0) / (best?.avgPrice ?? 1)) ? r : best
+      }, null)
+      if (value) { heroes.push(value); used.add(value.id) }
+    }
 
     // 4. 编辑推荐 — seeded random from remaining
-    const remaining = pool.filter(r => !used.has(r.id))
-    if (remaining.length > 0) {
-      // Simple seed: use day of year for stability within same day
-      const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000)
-      const idx = dayOfYear % remaining.length
-      heroes.push(remaining[idx])
+    if (heroes.length < maxHeroes) {
+      const remaining = pool.filter(r => !used.has(r.id))
+      if (remaining.length > 0) {
+        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000)
+        const idx = dayOfYear % remaining.length
+        heroes.push(remaining[idx])
+      }
     }
 
     return heroes
