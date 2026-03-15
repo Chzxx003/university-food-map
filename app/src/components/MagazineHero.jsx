@@ -49,31 +49,21 @@ export default function MagazineHero({ heroRestaurants }) {
   const [hot, rated, value, pick] = heroRestaurants
 
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[240px] sm:h-[280px] lg:h-[360px] 2xl:h-[420px]">
-      {/* 本周热门 — spans 2 rows left */}
-      <HeroCard
-        restaurant={hot}
-        category="hot"
-        className="row-span-2 rounded-2xl"
-      />
-      {/* 高分新发现 — top middle */}
-      <HeroCard
-        restaurant={rated}
-        category="rated"
-        className="rounded-2xl"
-      />
-      {/* 编辑推荐 — top right */}
-      <HeroCard
-        restaurant={pick}
-        category="pick"
-        className="rounded-2xl"
-      />
-      {/* 性价比之王 — bottom right, spans 2 cols */}
-      <HeroCard
-        restaurant={value}
-        category="value"
-        className="col-span-2 rounded-2xl"
-      />
-    </div>
+    <>
+      {/* Mobile: 2×2 equal grid */}
+      <div className="grid grid-cols-2 grid-rows-2 gap-2 h-[320px] sm:hidden">
+        <HeroCard restaurant={hot} category="hot" className="rounded-2xl" />
+        <HeroCard restaurant={rated} category="rated" className="rounded-2xl" />
+        <HeroCard restaurant={value} category="value" className="rounded-2xl" />
+        <HeroCard restaurant={pick} category="pick" className="rounded-2xl" />
+      </div>
+      {/* Desktop: 3-col asymmetric grid */}
+      <div className="hidden sm:grid grid-cols-3 grid-rows-2 gap-2 sm:h-[280px] lg:h-[360px] 2xl:h-[420px]">
+        <HeroCard restaurant={hot} category="hot" className="row-span-2 rounded-2xl" />
+        <HeroCard restaurant={rated} category="rated" className="rounded-2xl" />
+        <HeroCard restaurant={pick} category="pick" className="rounded-2xl" />
+        <HeroCard restaurant={value} category="value" className="col-span-2 rounded-2xl" />
+      </div>
+    </>
   )
 }
